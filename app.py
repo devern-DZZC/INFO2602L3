@@ -102,6 +102,14 @@ def signup_user_view():
 
 
 # Task 5.1 Here POST /todos
+@app.route('/todos', methods=['POST'])
+@login_required(RegularUser)
+def create_todo_view():
+  data = request.json
+  username = get_jwt_identity()
+  user = RegularUser.query.filter_by(username=username).first()
+  new_todo = user.add_todo(data['text'])
+  return jsonify(message=f'todo {new_todo.id} created!'), 201
 
 # Task 5.2 Here GET /todos
 
